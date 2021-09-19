@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 
-namespace JobsityWebChat.Security
+namespace WebChat.Api.Security
 {
     /// <summary>
     /// Simple class with a static method to manage token generation

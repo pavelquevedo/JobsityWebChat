@@ -1,10 +1,10 @@
-﻿using JobsityWebChat.Controllers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
+using WebChat.Api.Controllers;
 using WebChat.Utils.Common.Models.Request;
 using WebChat.Utils.Common.Models.Response;
 

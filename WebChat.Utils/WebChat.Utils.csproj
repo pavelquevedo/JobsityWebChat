@@ -45,6 +45,7 @@
     <Compile Include="Common\Enum\State.cs" />
     <Compile Include="Common\Models\Request\LoginRequest.cs" />
     <Compile Include="Common\Models\Request\UserRequest.cs" />
+    <Compile Include="Common\Models\Response\RoomResponse.cs" />
     <Compile Include="Common\Models\Response\UserResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

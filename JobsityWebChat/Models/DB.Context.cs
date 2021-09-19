@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace JobsityWebChat.Models
+namespace WebChat.Api.Models
 {
     using System;
     using System.Data.Entity;

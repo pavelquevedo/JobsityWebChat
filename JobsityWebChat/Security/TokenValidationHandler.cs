@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace JobsityWebChat.Security
+namespace WebChat.Api.Security
 {
     /// <summary>
     /// Token validator for Authorization Request using a DelegatingHandler

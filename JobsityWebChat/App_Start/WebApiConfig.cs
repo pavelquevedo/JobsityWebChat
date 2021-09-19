@@ -1,4 +1,4 @@
-﻿using JobsityWebChat.Security;
+﻿using WebChat.Api.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;

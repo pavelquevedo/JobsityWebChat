@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WebChat.Utils.Common.Enum;
 using WebChat.Utils.Common.Models.Request;
 using WebChat.Utils.Common.Models.Response;
 
-namespace JobsityWebChat.Controllers
+namespace WebChat.Api.Controllers
 {
     /// <summary>
     /// This controller manages users information and registry

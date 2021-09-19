@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JobsityWebChat.Security;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -13,6 +14,9 @@ namespace JobsityWebChat
 
             // Web API routes
             config.MapHttpAttributeRoutes();
+
+            //Adding token validation handler
+            config.MessageHandlers.Add(new TokenValidationHandler());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

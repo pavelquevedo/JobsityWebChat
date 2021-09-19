@@ -19,7 +19,7 @@ namespace JobsityWebChat.Tests.Controllers
     {
 
         [TestMethod]
-        public void Authenticate()
+        public async Task Authenticate()
         {
             LoginRequest loginRequest = new LoginRequest()
             {
@@ -28,14 +28,14 @@ namespace JobsityWebChat.Tests.Controllers
             };
             // Arrange
             AccountController controller = new AccountController();
-
-            Task<IHttpActionResult> httpActionResult = controller.Authenticate(loginRequest);
+            
             // Act
-            var contentResult = httpActionResult.Result as OkNegotiatedContentResult<UserResponse>;
+            var httpActionResult = await controller.Authenticate(loginRequest);
+            var contentResult = httpActionResult as OkNegotiatedContentResult<UserResponse>;
             
             // Assert
-            Assert.IsNotNull(httpActionResult.Result);
-            //Checking user data
+            Assert.IsNotNull(contentResult);
+            //Checking data type
             Assert.IsInstanceOfType(contentResult.Content, typeof(UserResponse));
             //Checking if returning token
             Assert.IsNotNull(contentResult.Content.AccessToken);

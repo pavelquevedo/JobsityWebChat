@@ -13,23 +13,23 @@ namespace JobsityWebChat.Tests.Controllers
     public class RoomControllerTest
     {
         [TestMethod]
-        public void GetAll()
+        public async Task GetAll()
         {
             // Arrange
             RoomController controller = new RoomController();
 
-            Task<IHttpActionResult> httpActionResult = controller.GetAll();
             // Act
-            var contentResult = httpActionResult.Result as OkNegotiatedContentResult<List<RoomResponse>>;
+            var httpActionResult = await controller.GetAll();
+            var contentResult = httpActionResult as OkNegotiatedContentResult<List<RoomResponse>>;
 
             // Assert
-            Assert.IsNotNull(httpActionResult.Result);
+            Assert.IsNotNull(contentResult);
 
             //Checking users data
             Assert.IsInstanceOfType(contentResult.Content, typeof(List<RoomResponse>));
 
             //Check if statuscode = 200OK
-            Assert.IsInstanceOfType(httpActionResult.Result, typeof(OkNegotiatedContentResult<List<RoomResponse>>));
+            Assert.IsInstanceOfType(httpActionResult, typeof(OkNegotiatedContentResult<List<RoomResponse>>));
 
         }
     }

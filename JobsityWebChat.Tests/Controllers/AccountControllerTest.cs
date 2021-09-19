@@ -12,7 +12,7 @@ using WebChat.Utils.Common.Models.Response;
 namespace JobsityWebChat.Tests.Controllers
 {
     /// <summary>
-    /// Summary description for AccountControllerTest
+    /// Test class with unit tests for AccountController
     /// </summary>
     [TestClass]
     public class AccountControllerTest
@@ -39,7 +39,6 @@ namespace JobsityWebChat.Tests.Controllers
             Assert.IsInstanceOfType(contentResult.Content, typeof(UserResponse));
             //Checking if returning token
             Assert.IsNotNull(contentResult.Content.AccessToken);
-
         }
     }
 }

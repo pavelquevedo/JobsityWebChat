@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebChatApi", "JobsityWebChat\WebChatApi.csproj", "{0A975411-2E1B-4279-A9D7-EB7EC1084143}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebChat.Api", "JobsityWebChat\WebChat.Api.csproj", "{0A975411-2E1B-4279-A9D7-EB7EC1084143}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebChatApi.Tests", "JobsityWebChat.Tests\WebChatApi.Tests.csproj", "{1ADF4F33-BBC5-49DF-8C01-04CCE005AE73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebChat.Api.Tests", "JobsityWebChat.Tests\WebChat.Api.Tests.csproj", "{1ADF4F33-BBC5-49DF-8C01-04CCE005AE73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebChat.Utils", "WebChat.Utils\WebChat.Utils.csproj", "{F91B6209-F7B1-41DC-A907-498B5EEBAD78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{1ADF4F33-BBC5-49DF-8C01-04CCE005AE73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ADF4F33-BBC5-49DF-8C01-04CCE005AE73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ADF4F33-BBC5-49DF-8C01-04CCE005AE73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F91B6209-F7B1-41DC-A907-498B5EEBAD78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F91B6209-F7B1-41DC-A907-498B5EEBAD78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F91B6209-F7B1-41DC-A907-498B5EEBAD78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F91B6209-F7B1-41DC-A907-498B5EEBAD78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

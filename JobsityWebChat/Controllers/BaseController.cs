@@ -8,6 +8,7 @@ using System.Web.Http;
 
 namespace JobsityWebChat.Controllers
 {
+    [Authorize]
     public class BaseController : ApiController
     {
         private WebChatDBEntities _db;

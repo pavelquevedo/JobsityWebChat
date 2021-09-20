@@ -2,6 +2,8 @@
 using System;
 using System.Threading.Tasks;
 using WebChat.Api.Models;
+using WebChat.Utils.Common.Models.Request;
+using WebChat.Utils.Services;
 
 namespace WebChat.Api
 {
@@ -37,26 +39,47 @@ namespace WebChat.Api
         public void Send(int roomId, string userName, int userId, string message, string accessToken)
         {
             string messageDate = DateTime.Now.ToString();
+            QueueProducerService queueProducerService = new QueueProducerService();
 
-            using (WebChatDBEntities db = new WebChatDBEntities())
+            //Check if user sent a stock request command
+            if (message.ToUpper().Contains("/STOCK="))
             {
-                var newMessage = new Message();
-                newMessage.RoomID = roomId;
-                newMessage.CreationDate = DateTime.Now;
-                newMessage.UserID = userId;
-                newMessage.Message1 = message;
-                newMessage.StateID = 1;
-
-                db.Message.Add(newMessage);
-                db.SaveChanges();
+                try
+                {
+                    QueueRequest queueRequest = new QueueRequest()
+                    {
+                        RoomId = roomId,
+                        Message = message
+                    };
+                    queueProducerService.AddMessageToQueue(queueRequest);
+                }
+                catch (Exception)
+                {
+                    //TODO: Add code to manage this exception
+                }                
             }
+            else
+            {
+                using (WebChatDBEntities db = new WebChatDBEntities())
+                {
+                    var newMessage = new Message();
+                    newMessage.RoomID = roomId;
+                    newMessage.CreationDate = DateTime.Now;
+                    newMessage.UserID = userId;
+                    newMessage.Message1 = message;
+                    newMessage.StateID = 1;
 
-            //Send message to everyone
-            //Clients.All.sendChat(userName, message, messageDate, userId);
+                    db.Message.Add(newMessage);
+                    db.SaveChanges();
+                }
 
-            //Send message to a specific group
-            Clients.Group(roomId.ToString()).sendChat(userName, message, messageDate, userId);
+                //Send message to everyone
+                //Clients.All.sendChat(userName, message, messageDate, userId);
 
+                //Send message to a specific group
+                
+                Clients.Group(roomId.ToString()).sendChat(userName, message, messageDate, userId);
+            }
         }
     }
 }

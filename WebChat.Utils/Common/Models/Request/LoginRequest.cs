@@ -10,8 +10,10 @@ namespace WebChat.Utils.Common.Models.Request
     public class LoginRequest
     {
         [Required]
+        [StringLength(20)]
         public string Login { get; set; }
         [Required]
+        [StringLength(20)]
         public string Password { get; set; }
     }
 }

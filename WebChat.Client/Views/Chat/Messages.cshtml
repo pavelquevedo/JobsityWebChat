@@ -1,0 +1,156 @@
+﻿@model IEnumerable<WebChat.Utils.Common.Models.Response.MessageResponse>
+
+@{
+    WebChat.Utils.Common.Models.Response.UserResponse oUserSession = (WebChat.Utils.Common.Models.Response.UserResponse)Session["User"];
+    WebChat.Utils.Common.Models.Response.RoomResponse oCurrentRoom = ViewBag.CurrentRoom;
+
+    ViewBag.Title = oUserSession.FirstName + " " + oUserSession.LastName + "'s Chatroom Messages";
+}
+
+<style type="text/css">
+    .message {
+        border: 1px solid #000;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 5px;
+    }
+
+    .messageRight {
+        text-align: right;
+        float: right;
+    }
+</style>
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <b>Messages from the users in the room</b>
+        <div style="height:70vh; border:1px solid #000; border-radius:10px;overflow:auto;" id="allMessages">
+            @foreach (var message in Model)
+            {
+                string classRight = "";
+                if (oUserSession.Id == message.UserID)
+                {
+                    classRight = "messageRight";
+                }
+
+                <div>
+                    <div class="col-md-6 message @classRight">
+                        <b>@message.UserFullName</b><br />
+                        <div>@message.Message</div>
+                        <div style="font-size:11px;">
+                            @message.CreationDate.ToString()
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            }
+        </div>
+        <div class="row" style="margin-top:15px;">
+            <div class="col-md-3">
+                <input type="text" value="" id="txtMessage" style="width:110%" class="form-control" placeholder="Write a message..." />
+            </div>
+            <div class="col-md-2">
+                <input type="submit" id="btnSend" style="width:100%" value="Send" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<audio style="display:none" controls="controls" id="audioWelcome">
+    <source src="~/Media/login.wav" type="audio/x-wav" />
+    Your browser doesn't support audio files
+</audio>
+
+@section scripts{
+    <script src="~/Scripts/jquery.signalR-2.4.2.js"></script>
+    <script src="@WebChat.Utils.Common.Constants.Path.Url.SignlRHub"></script>
+    <script type="text/javascript">
+        $(function () {
+            document.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+
+        var chatHub = null;
+
+        $(function () {
+            //Enable cors support for SIGNALR
+            $.support.cors = true;
+            //Get hub Url
+            $.connection.hub.url = "@WebChat.Utils.Common.Constants.Path.Url.SignlR";
+
+            //New instance of the hub
+            chatHub = $.connection.chatHub;
+
+            //Anonymum function to play a sound when a user enters
+            chatHub.client.enterUser = function () {
+                document.getElementById("audioWelcome").play();
+            }
+
+            //Anonymum function to receive a message
+            chatHub.client.sendChat = function (userName, message, messageDate, userId) {
+
+                var classRight = "";
+
+                //Add right alignment if message is from logged user
+                if (userId == @oUserSession.Id) {
+                    classRight = "messageRight";
+                }
+
+                //Build a new div with the message information
+                var newMessage = '<div>'+
+                    "<div class='col-md-6 message " + classRight + "'>" +
+                        "<b>" + userName + "</b><br />" +
+                        "<div>" + message + "</div>" +
+                            "<div style='font-size:11px;'>" +
+                                 "this will be ready soon" +
+                            "</div>" +
+                        "</div>" +
+                        "<div class='clearfix'></div>" +
+                    "</div>";
+
+                //Add new div to messages, focus the message area and clean it
+                $("#allMessages").append(newMessage);
+                $("#txtMessage").focus();
+                $("#txtMessage").prop("value", "");
+
+                //Play notification
+                document.getElementById("audioWelcome").play();
+            }
+
+
+            $.connection.hub.start().done(function () {
+
+                //Joint to a room
+                chatHub.server.joinRoom(@oCurrentRoom.Id);
+
+                $("#btnSend").click(function () {
+                    sendMessage();
+                });
+            });
+        });
+
+        function sendMessage() {
+                //Fill variables needed
+            var userName = "@oUserSession.FirstName" + " @oUserSession.LastName";
+            var roomId = @oCurrentRoom.Id;
+            var message = $("#txtMessage").prop("value");
+            var userId = "@oUserSession.Id";
+
+            //If there's no message, then do nothing
+            if (message == "") {
+                alert("Please type a message.");
+                return;
+            }
+
+            //Send message to the server side
+            chatHub.server.send(roomId, userName, userId, message, "@oUserSession.AccessToken");
+        }
+    </script>
+}

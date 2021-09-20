@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Constants\Path.cs" />
     <Compile Include="Common\Enum\MessageType.cs" />
     <Compile Include="Common\Enum\State.cs" />
     <Compile Include="Common\Models\Request\LoginRequest.cs" />

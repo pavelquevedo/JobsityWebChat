@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebChat.Api.Tests", "Jobsit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebChat.Utils", "WebChat.Utils\WebChat.Utils.csproj", "{F91B6209-F7B1-41DC-A907-498B5EEBAD78}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebChat.Client", "WebChat.Client\WebChat.Client.csproj", "{4C5520CE-6CB7-4763-9027-87261E232F59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebChat.Client.Tests", "WebChat.Client.Tests\WebChat.Client.Tests.csproj", "{8140E30B-B89C-4B17-BAB0-BC5CC81732B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{F91B6209-F7B1-41DC-A907-498B5EEBAD78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F91B6209-F7B1-41DC-A907-498B5EEBAD78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F91B6209-F7B1-41DC-A907-498B5EEBAD78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C5520CE-6CB7-4763-9027-87261E232F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C5520CE-6CB7-4763-9027-87261E232F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C5520CE-6CB7-4763-9027-87261E232F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C5520CE-6CB7-4763-9027-87261E232F59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8140E30B-B89C-4B17-BAB0-BC5CC81732B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8140E30B-B89C-4B17-BAB0-BC5CC81732B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8140E30B-B89C-4B17-BAB0-BC5CC81732B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8140E30B-B89C-4B17-BAB0-BC5CC81732B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

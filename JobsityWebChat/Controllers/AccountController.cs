@@ -13,7 +13,7 @@ namespace WebChat.Api.Controllers
     /// This controller manages the api authentication
     /// </summary>
     [AllowAnonymous]
-    [RoutePrefix("api/login")]
+    [RoutePrefix("api/authentication")]
     public class AccountController : BaseController
     {
         /// <summary>

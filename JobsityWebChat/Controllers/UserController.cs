@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using WebChat.Api.Security;
 using WebChat.Utils.Common.Enum;
 using WebChat.Utils.Common.Models.Request;
 using WebChat.Utils.Common.Models.Response;
@@ -85,13 +86,17 @@ namespace WebChat.Api.Controllers
                 dbContext.User.Add(newUser);
                 int userID = await dbContext.SaveChangesAsync();
 
+                //Getting token
+                string token = TokenHandler.GenerateToken(newUser.Login);
+
                 //Building user response dto
                 UserResponse userResponse = new UserResponse()
                 {
                     Id = userID,
                     Login = newUser.Login,
                     FirstName = newUser.FirstName,
-                    LastName = newUser.LastName
+                    LastName = newUser.LastName,
+                    AccessToken = token
                 };
 
                 //return new user

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<WebChat.Utils.Common.Models.Response.RoomResponse>
+
+@{
+    ViewBag.Title = "Lobby";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Available chatrooms</h2>
+
+<div class="row" style="margin-top:30px;">
+    <div class="col-md-12">
+        @foreach (var room in Model)
+        {
+            <div>
+                <h4><b>@room.Name</b></h4>
+                @room.Description <br />
+
+                <div style="text-align:center;">
+                    <input type="button" class="btn btn-success" onclick="jsGo(@room.Id);" value="Enter" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    function jsGo(idRoom) {
+        document.location.href = "@Url.Content("~/Chat/Messages/")" + "?roomId=" + idRoom;
+    }
+</script>

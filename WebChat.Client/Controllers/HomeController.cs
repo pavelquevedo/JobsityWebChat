@@ -31,11 +31,10 @@ namespace WebChat.Client.Controllers
             if (userResponse != null)
             {
                 Session["User"] = userResponse;
-                return RedirectToAction("Index", "Lobby");
+                return RedirectToAction("Index", "Room");
             }
 
             ViewBag.error = "Incorrect credentials";
-
             return View();
         }
 
@@ -60,6 +59,7 @@ namespace WebChat.Client.Controllers
             if (userResponse != null)
             {
                 Session["User"] = userResponse;
+                return RedirectToAction("Index", "Room");
             }
 
             return View();

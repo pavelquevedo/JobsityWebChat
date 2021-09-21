@@ -1,9 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using LumenWorks.Framework.IO.Csv;
+using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Configuration;
+using System.Data;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WebChat.Utils.Common.Models.Request;
+using WebChat.Utils.Common.Models.Response;
 
 namespace WebChat.Utils.Tools
 {
@@ -23,7 +29,10 @@ namespace WebChat.Utils.Tools
         /// <returns></returns>
         public static dynamic ExecuteWebMethod<ResponseType>(string url, Method method, string accessToken, object objectRequest = null)
         {
-            RestClient restClient = new RestClient(ConfigurationManager.AppSettings["api_url"]);
+            var azureFunctionUrl = Environment.GetEnvironmentVariable("api_url");
+            var webConfigUrl = ConfigurationManager.AppSettings["api_url"];
+
+            RestClient restClient = new RestClient(webConfigUrl != null ? webConfigUrl : azureFunctionUrl);
             RestRequest restRequest = new RestRequest(url, method);
 
             //Add request body
@@ -57,5 +66,69 @@ namespace WebChat.Utils.Tools
                 return null;
             }
         }
+
+        /// <summary>
+        /// Method which invokes stook.com api and performs requested csv 
+        /// convertion
+        /// </summary>
+        /// <param name="queueRequest"></param>
+        /// <returns>StockQuoteResponse object with request's data</returns>
+        public static StockQuoteResponse GetStockQuoteResponse(StockQuoteRequest queueRequest)
+        {
+            //Splitting stock command
+            string[] messageSplit = queueRequest.Command.Split('=');
+
+            var stockQuoteResponse = new StockQuoteResponse();
+
+            if (messageSplit.Length == 2)
+            {
+                var url = "https://stooq.com/q/l/"; //ConfigurationManager.AppSettings["stooq_api"];
+                var tableResult = new DataTable();
+
+                //Creating simple web request
+                WebRequest webRequest = WebRequest.Create(url + string.Format("?s={0}&f=sd2t2ohlcv&h&e=csv", messageSplit[1]));
+
+                //Web request properties
+                webRequest.Method = Method.GET.ToString();
+                webRequest.PreAuthenticate = true;
+                webRequest.ContentType = "text/csv; charset=utf-8";
+                webRequest.Timeout = 10000;
+
+                var httpResponse = (HttpWebResponse)webRequest.GetResponse();
+                using (var csvReader = new CsvReader(new StreamReader(httpResponse.GetResponseStream()), true))
+                {
+                    //Converting the stream response into a datatable
+                    tableResult.Load(csvReader);
+
+                    //Converting table result to StockQuoteResonpse objects
+                    var stockQuoteList = (from row in tableResult.AsEnumerable()
+                                          select new StockQuoteResponse()
+                                          {
+                                              Symbol = row["Symbol"].ToString(),
+                                              Date = DateTime.Parse(row["Date"].ToString()),
+                                              Time = row["Time"].ToString(),
+                                              Open = Decimal.Parse(row["Close"].ToString()),
+                                              High = Decimal.Parse(row["High"].ToString()),
+                                              Low = Decimal.Parse(row["Low"].ToString()),
+                                              Close = Decimal.Parse(row["Close"].ToString()),
+                                              Volume = Int64.Parse(row["Volume"].ToString()),
+                                              State = Common.Enum.State.CREATED
+                                          }).ToList();
+
+                    if (stockQuoteList != null)
+                    {
+                        if (stockQuoteList.Count > 0)
+                        {
+                            //Since the csv just contains 1 row, we're returning only the first object
+                            stockQuoteResponse = stockQuoteList.FirstOrDefault();
+                            return stockQuoteResponse;
+                        }
+                    }
+                }
+            }
+           
+            return stockQuoteResponse;
+        }
+
     }
 }

@@ -5,6 +5,7 @@
         ACTIVE = 1,
         INACTIVE = 2,
         DELETED = 3,
-        SENT = 4
+        CREATED = 4,
+        SENT = 5
     }
 }

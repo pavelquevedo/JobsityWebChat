@@ -111,7 +111,8 @@ namespace WebChat.Utils.Tools
                                               High = Decimal.Parse(row["High"].ToString()),
                                               Low = Decimal.Parse(row["Low"].ToString()),
                                               Close = Decimal.Parse(row["Close"].ToString()),
-                                              Volume = Int64.Parse(row["Volume"].ToString())
+                                              Volume = Int64.Parse(row["Volume"].ToString()),
+                                              State = Common.Enum.State.CREATED
                                           }).ToList();
 
                     if (stockQuoteList != null)

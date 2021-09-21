@@ -71,6 +71,21 @@ namespace WebChat.Api.Controllers
 
             try
             {
+                if (true)
+                {
+                    //Checking if user already exists
+                    var userQuery = await (from u in dbContext.User
+                                            where u.Login == model.Login
+                                            select u).FirstOrDefaultAsync();
+
+                    //If exists return conflict code
+                    if (userQuery != null)
+                    {
+                        return Conflict();
+                    }
+
+                }
+
                 //Building new user model
                 Models.User newUser = new Models.User()
                 {

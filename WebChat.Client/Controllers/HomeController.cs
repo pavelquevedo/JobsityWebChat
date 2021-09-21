@@ -76,8 +76,13 @@ namespace WebChat.Client.Controllers
                 Session["User"] = userResponse;
                 return RedirectToAction("Index", "Room");
             }
+            else
+            {
+                ModelState.AddModelError("Login", "Seems like someone took that username before.");
+                return View(model);
+            }
 
-            ViewBag.error = "An error ocurred, please try again later.";
+            
             return View();
         }
     }

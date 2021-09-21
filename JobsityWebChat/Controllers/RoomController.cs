@@ -15,6 +15,10 @@ namespace WebChat.Api.Controllers
     [RoutePrefix("api/room")]
     public class RoomController : BaseController
     {
+        /// <summary>
+        /// Web method to retrieve a single room
+        /// </summary>
+        /// <returns>Single room object</returns>
         [HttpGet]
         [Route("getSingle")]
         public async Task<IHttpActionResult> GetSingle(int roomId)

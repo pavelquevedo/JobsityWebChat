@@ -32,5 +32,27 @@ namespace JobsityWebChat.Tests.Controllers
             Assert.IsInstanceOfType(httpActionResult, typeof(OkNegotiatedContentResult<List<RoomResponse>>));
 
         }
+
+        [TestMethod]
+        public async Task GetSingle()
+        {
+            // Arrange
+            int roomId = 1;
+            RoomController controller = new RoomController();
+
+            // Act
+            var httpActionResult = await controller.GetSingle(roomId);
+            var contentResult = httpActionResult as OkNegotiatedContentResult<RoomResponse>;
+
+            // Assert
+            Assert.IsNotNull(contentResult);
+
+            //Checking users data
+            Assert.IsInstanceOfType(contentResult.Content, typeof(RoomResponse));
+
+            //Check if statuscode = 200OK
+            Assert.IsInstanceOfType(httpActionResult, typeof(OkNegotiatedContentResult<RoomResponse>));
+
+        }
     }
 }

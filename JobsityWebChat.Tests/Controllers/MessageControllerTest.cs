@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web.Http;
 using System.Web.Http.Results;
 using WebChat.Api.Controllers;
+using WebChat.Utils.Common.Models.Request;
 using WebChat.Utils.Common.Models.Response;
+using WebChat.Utils.Tools;
 
 namespace JobsityWebChat.Tests.Controllers
 {
@@ -15,7 +15,7 @@ namespace JobsityWebChat.Tests.Controllers
         [TestMethod]
         public async Task GetMessages()
         {
-            //arrange - left blank on purpose
+            //arrange 
             int roomId = 1; //For room: Tech
             int userId = 1; //For User: Pavel Quevedo
 
@@ -34,6 +34,41 @@ namespace JobsityWebChat.Tests.Controllers
             //Check if statuscode = 200OK
             Assert.IsInstanceOfType(httpActionResult, typeof(OkNegotiatedContentResult<List<MessageResponse>>));
 
+        }
+
+        [TestMethod]
+        public async Task SendBotMessage()
+        {
+            //arrange
+            int roomId = 1; //For room: Tech
+            OkNegotiatedContentResult<StockQuoteResponse> contentResult = null;
+
+            MessageController controller = new MessageController();
+
+            StockQuoteRequest queueRequest = new StockQuoteRequest() {
+                Command = "/stock=AAPL.US",
+                RoomId = 1
+            };
+
+            StockQuoteResponse quoteResponse = RequestUtil.GetStockQuoteResponse(queueRequest);
+
+            // Act
+            if (quoteResponse !=null)
+            {
+                var httpActionResult = await controller.SendBotMessage(roomId, quoteResponse);
+                contentResult = httpActionResult as OkNegotiatedContentResult<StockQuoteResponse>;
+            }
+
+            // Assert
+            Assert.IsNotNull(quoteResponse);
+
+            //Check if message was sent
+            Assert.AreEqual(contentResult.Content.State, WebChat.Utils.Common.Enum.State.SENT);
+
+            Assert.IsNotNull(contentResult);
+
+            //Checking users data
+            Assert.IsInstanceOfType(contentResult.Content, typeof(StockQuoteResponse));
         }
     }
 }

@@ -78,6 +78,7 @@
     <script type="text/javascript">
 
         var chatHub = null;
+        var divMessages = document.getElementById("allMessages");
 
         $(function () {
             //Enable cors support for SIGNALR
@@ -91,6 +92,8 @@
             //Anonymum function to play a sound when a user enters
             chatHub.client.enterUser = function () {
                 document.getElementById("audioWelcome").play();
+
+                scrollDown(divMessages);
             }
 
             //Anonymum function to receive a message
@@ -122,6 +125,9 @@
 
                 //Play notification
                 document.getElementById("audioWelcome").play();
+
+                //Move scroll down
+                scrollDown(divMessages);
             }
 
 
@@ -151,6 +157,11 @@
 
             //Send message to the server side
             chatHub.server.send(roomId, userName, userId, message, "@oUserSession.AccessToken");
+        }
+
+        //Scroll an element down
+        function scrollDown(element) {
+            element.scrollTop = element.scrollHeight;
         }
     </script>
 }

@@ -84,7 +84,7 @@ namespace WebChat.Api.Controllers
 
                 //Adding new user to the database
                 dbContext.User.Add(newUser);
-                int userID = await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
 
                 //Getting token
                 string token = TokenHandler.GenerateToken(newUser.Login);
@@ -92,7 +92,7 @@ namespace WebChat.Api.Controllers
                 //Building user response dto
                 UserResponse userResponse = new UserResponse()
                 {
-                    Id = userID,
+                    Id = newUser.Id,
                     Login = newUser.Login,
                     FirstName = newUser.FirstName,
                     LastName = newUser.LastName,

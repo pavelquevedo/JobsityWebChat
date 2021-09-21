@@ -35,7 +35,7 @@ namespace WebChat.Client.Controllers
                 return View(model);
             }
 
-            model.Password = Encrypt.GetSHA256(model.Password).ToUpper();
+            model.Password = Encrypt.GetSHA256(model.Password);
 
             //Authenticating user
             UserResponse userResponse =
@@ -67,6 +67,9 @@ namespace WebChat.Client.Controllers
                 return View(model);
             }
 
+            //Encrypt model password
+            model.Password = Encrypt.GetSHA256(model.Password);
+
             //Performing user registration
             UserResponse userResponse =
             RequestUtil.ExecuteWebMethod<UserResponse>("api/user/register", RestSharp.Method.POST, string.Empty, model);
@@ -81,9 +84,6 @@ namespace WebChat.Client.Controllers
                 ModelState.AddModelError("Login", "Seems like someone took that username before.");
                 return View(model);
             }
-
-            
-            return View();
         }
     }
 }

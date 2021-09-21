@@ -3,6 +3,7 @@
 @{
     WebChat.Utils.Common.Models.Response.UserResponse oUserSession = (WebChat.Utils.Common.Models.Response.UserResponse)Session["User"];
     WebChat.Utils.Common.Models.Response.RoomResponse oCurrentRoom = ViewBag.CurrentRoom;
+
     ViewBag.Title = oUserSession.FirstName + " " + oUserSession.LastName + "'s Chatroom Messages";
 }
 
@@ -57,7 +58,6 @@
     </div>
 </div>
 
-<!--Audio element added to be used when an user enters or sends a message-->
 <audio style="display:none" controls="controls" id="audioWelcome">
     <source src="~/Media/login.wav" type="audio/x-wav" />
     Your browser doesn't support audio files
@@ -68,7 +68,6 @@
     <script src="@WebChat.Utils.Common.Constants.Path.Url.SignlRHub"></script>
     <script type="text/javascript">
         $(function () {
-            //Event added to capture enter key and send message
             document.addEventListener("keyup", function (event) {
                 if (event.keyCode === 13) {
                     sendMessage();
@@ -77,10 +76,10 @@
         });
     </script>
     <script type="text/javascript">
+
         var chatHub = null;
         var divMessages = document.getElementById("allMessages");
 
-        //Load SignalR when document loads
         $(function () {
             //Enable cors support for SIGNALR
             $.support.cors = true;
@@ -131,7 +130,7 @@
                 scrollDown(divMessages);
             }
 
-            //Executed when connection is established
+
             $.connection.hub.start().done(function () {
 
                 //Joint to a room
@@ -154,13 +153,10 @@
             if (message == "") {
                 alert("Please type a message.");
                 return;
-            } else if (message.toUpperCase().includes("/STOCK=")) {
-                //If message is a command, clean textbox
-                $("#txtMessage").prop("value", "");
             }
 
             //Send message to the server side
-            chatHub.server.send(roomId, userName, userId, message);
+            chatHub.server.send(roomId, userName, userId, message, "@oUserSession.AccessToken");
         }
 
         //Scroll an element down

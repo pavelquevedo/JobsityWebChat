@@ -287,6 +287,7 @@
     <Content Include="Models\DB.edmx.diagram">
       <DependentUpon>DB.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\jobsitywebchatapi - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

@@ -108,6 +108,8 @@
     <Compile Include="Controllers\MessageControllerTest.cs" />
     <Compile Include="Controllers\RoomControllerTest.cs" />
     <Compile Include="Controllers\UserControllerTest.cs" />
+    <Compile Include="Helpers\LoginHelper.cs" />
+    <Compile Include="Helpers\RandomNameGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

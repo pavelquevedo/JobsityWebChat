@@ -9,18 +9,24 @@ Dependencies can be restored with right click on the solution, and selecting "Re
 These are the nuget packages installed manually in each solution.
 
 WebChat.Api
-  Microsoft.AspNet.SignalR v3.2.7 
+  Microsoft.AspNet.SignalR v3.2.7
+  
   Microsoft.IdentityModel.Tokens v6.12.2
+  
   Microsoft.Owin.Cors v4.2.0
+  
   Newtonsoft.Json v12.0.2
   
 WebChat.Client
   Microsoft.AspNet.SignalR v3.2.7
+  
   Newtonsoft.Json v12.0.2
+  
   RestSharp v106.12.0
 
 WebChat.Utils
   LumenWorksX.Framework.IO v1.0.1 (to parse csv to datatable)
+  
   Microsoft.Azure.ServiceBuse v.5.1.3 (to manage azure service bus queue)
 
 # Installation

@@ -1,0 +1,30 @@
+﻿@model WebChat.Utils.Common.Models.Request.LoginRequest
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+
+    string error = (string)ViewBag.error;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        @using (@Html.BeginForm("Login", "Home", FormMethod.Post))
+        {
+            @Html.LabelFor(m => m.Login)
+            @Html.TextBoxFor(m => m.Login, "", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Login, "", new { @class = "text-danger" })
+
+            @Html.LabelFor(m => m.Password)
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+            <div class="text-danger">@error</div>
+
+            <input type="submit" value="Submit" class="btn btn-success" />
+        }
+    </div>
+</div>
+

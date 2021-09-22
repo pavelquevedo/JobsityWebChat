@@ -5,7 +5,7 @@ WebChat using SignalR, EntityFramework, MVC, SQL Server and Azure Service Bus Me
 You should have installed VS2019 with .NET Framework 4.7.2 (latest version 09/21/2021) with nuget package manager. 
 Dependencies can be restored with right click on the solution, and selecting "Restore nuget packages".
 
-#Dependencies
+# Dependencies
 These are the nuget packages installed manually in each solution.
 
 WebChat.Api
@@ -23,7 +23,7 @@ WebChat.Utils
   LumenWorksX.Framework.IO v1.0.1 (to parse csv to datatable)
   Microsoft.Azure.ServiceBuse v.5.1.3 (to manage azure service bus queue)
 
-#Installation
+# Installation
 Those are the steps you must follow if you want to run the project locally.
 
 1. Restore nuget packages.
@@ -34,7 +34,7 @@ these are te places where you have to change it:
   - WebChat.Client\Web.config\appSettings - api_url
 3. Run the solution.
 
-PS. If you want to run the bot WebChat.BotFunction locally, i'm sending you the local.settings.json file by mail.
+PS. If you want to run the bot WebChat.BotFunction locally, i'm sending you the local.settings.json file by mail and also the connection string for the sql server database.
 
 Thank you for reading, enjoy!
 

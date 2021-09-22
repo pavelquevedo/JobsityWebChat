@@ -11,7 +11,6 @@ namespace WebChat.Api.Controllers
 {    /// <summary>
      /// This controller manages the room's messages
      /// </summary>
-    [AllowAnonymous]
     [RoutePrefix("api/message")]
     public class MessageController : BaseController
     {

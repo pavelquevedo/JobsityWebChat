@@ -32,6 +32,7 @@ namespace WebChat.Utils.Tools
             var azureFunctionUrl = Environment.GetEnvironmentVariable("api_url");
             var webConfigUrl = ConfigurationManager.AppSettings["api_url"];
 
+            //If is running library from WebChat.Api it will use webConfigUrl, if is from Azure Function will use azureFunctionUrl
             RestClient restClient = new RestClient(webConfigUrl != null ? webConfigUrl : azureFunctionUrl);
             RestRequest restRequest = new RestRequest(url, method);
 

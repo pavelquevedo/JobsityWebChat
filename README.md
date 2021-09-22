@@ -23,7 +23,11 @@ These are the nuget packages installed manually in each solution.
 * LumenWorksX.Framework.IO v1.0.1 
 * Microsoft.Azure.ServiceBuse v.5.1.3 
 
-# Installation
+# Live app
+You can test the application running over azure services right here:
+https://jobsitywebchatclient.azurewebsites.net/
+
+# Local Installation
 Those are the steps you must follow if you want to run the project locally.
 
 1. Restore nuget packages.

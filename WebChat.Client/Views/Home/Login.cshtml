@@ -11,19 +11,26 @@
 
 <div class="row">
     <div class="col-md-12">
+
         @using (@Html.BeginForm("Login", "Home", FormMethod.Post))
         {
-            @Html.LabelFor(m => m.Login)
-            @Html.TextBoxFor(m => m.Login, "", new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Login, "", new { @class = "text-danger" })
 
-            @Html.LabelFor(m => m.Password)
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(m => m.Login)
+                @Html.TextBoxFor(m => m.Login, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Login, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
 
             <div class="text-danger">@error</div>
 
-            <input type="submit" value="Submit" class="btn btn-success" />
+            <input type="submit" value="Login" class="btn btn-success" />
+
         }
     </div>
 </div>

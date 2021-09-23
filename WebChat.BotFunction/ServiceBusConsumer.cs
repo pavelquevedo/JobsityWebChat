@@ -2,6 +2,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
+using System;
 using WebChat.Utils.Common.Models.Request;
 using WebChat.Utils.Common.Models.Response;
 using WebChat.Utils.Tools;
@@ -27,8 +28,15 @@ namespace WebChat.QueueConsumerFunction
 
                 if (stockQuoteResponse != null)
                 {
+                    //Getting usertoken
+                    LoginRequest loginRequest = new LoginRequest()
+                    {
+                        Login = Environment.GetEnvironmentVariable("auth_user"),
+                        Password = Environment.GetEnvironmentVariable("user_password")
+                    };
+                    UserResponse loggedUser = RequestUtil.ExecuteWebMethod<UserResponse>("api/authentication/authenticate", Method.POST, string.Empty, loginRequest);
                     //Getting response from api    
-                    StockQuoteResponse result = RequestUtil.ExecuteWebMethod<StockQuoteResponse>(string.Format("api/message/sendBotMessage?roomId={0}", stockQueueRequest.RoomId), Method.POST, string.Empty, stockQuoteResponse);
+                    StockQuoteResponse result = RequestUtil.ExecuteWebMethod<StockQuoteResponse>(string.Format("api/message/sendBotMessage?roomId={0}", stockQueueRequest.RoomId), Method.POST, loggedUser.AccessToken, stockQuoteResponse);
                     //Printing in log item processed
                     log.LogInformation("Queue item processed: " + JsonConvert.SerializeObject(result));
                 }

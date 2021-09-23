@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="WebChatDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="WebChatDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Message">
           <Key>
             <PropertyRef Name="Id" />
@@ -44,7 +44,6 @@
           <Property Name="CreationDate" Type="datetime" Nullable="false" />
           <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="AccessToken" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Message_Room">
           <End Role="Room" Type="Self.Room" Multiplicity="1" />
@@ -132,8 +131,7 @@
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="WebChatDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -149,7 +147,7 @@
           <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Room" Relationship="Self.FK_Message_Room" FromRole="Message" ToRole="Room" />
           <NavigationProperty Name="State" Relationship="Self.FK_Message_State" FromRole="Message" ToRole="State" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Message_User" FromRole="Message" ToRole="User" />
+          <NavigationProperty Name="User" Relationship="WebChatDBModel.FK_Message_User" FromRole="Message" ToRole="User" />
         </EntityType>
         <EntityType Name="Room">
           <Key>
@@ -171,22 +169,7 @@
           <Property Name="State1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Message" Relationship="Self.FK_Message_State" FromRole="State" ToRole="Message" />
           <NavigationProperty Name="Room" Relationship="Self.FK_Room_State" FromRole="State" ToRole="Room" />
-          <NavigationProperty Name="User" Relationship="Self.FK_User_State" FromRole="State" ToRole="User" />
-        </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Login" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="512" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="StateID" Type="Int32" Nullable="false" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="AccessToken" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Message" Relationship="Self.FK_Message_User" FromRole="User" ToRole="Message" />
-          <NavigationProperty Name="State" Relationship="Self.FK_User_State" FromRole="User" ToRole="State" />
+          <NavigationProperty Name="User" Relationship="WebChatDBModel.FK_User_State" FromRole="State" ToRole="User" />
         </EntityType>
         <Association Name="FK_Message_Room">
           <End Role="Room" Type="Self.Room" Multiplicity="1" />
@@ -212,18 +195,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Message_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Message" Type="Self.Message" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Message">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Room_State">
           <End Role="State" Type="Self.State" Multiplicity="1" />
           <End Role="Room" Type="Self.Room" Multiplicity="*" />
@@ -236,9 +207,61 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityContainer Name="WebChatDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Message" EntityType="Self.Message" />
+          <EntitySet Name="Room" EntityType="Self.Room" />
+          <EntitySet Name="State" EntityType="Self.State" />
+          <AssociationSet Name="FK_Message_Room" Association="Self.FK_Message_Room">
+            <End Role="Room" EntitySet="Room" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Message_State" Association="Self.FK_Message_State">
+            <End Role="State" EntitySet="State" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Room_State" Association="Self.FK_Room_State">
+            <End Role="State" EntitySet="State" />
+            <End Role="Room" EntitySet="Room" />
+          </AssociationSet>
+          <EntitySet Name="User" EntityType="WebChatDBModel.User" />
+          <AssociationSet Name="FK_Message_User" Association="WebChatDBModel.FK_Message_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_State" Association="WebChatDBModel.FK_User_State">
+            <End Role="State" EntitySet="State" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="StateID" Type="Int32" Nullable="false" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Message" Relationship="WebChatDBModel.FK_Message_User" FromRole="User" ToRole="Message" />
+          <NavigationProperty Name="State" Relationship="WebChatDBModel.FK_User_State" FromRole="User" ToRole="State" />
+        </EntityType>
+        <Association Name="FK_Message_User">
+          <End Type="WebChatDBModel.User" Role="User" Multiplicity="1" />
+          <End Type="WebChatDBModel.Message" Role="Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_State">
-          <End Role="State" Type="Self.State" Multiplicity="1" />
-          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <End Type="WebChatDBModel.State" Role="State" Multiplicity="1" />
+          <End Type="WebChatDBModel.User" Role="User" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="State">
               <PropertyRef Name="Id" />
@@ -248,32 +271,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="WebChatDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Message" EntityType="Self.Message" />
-          <EntitySet Name="Room" EntityType="Self.Room" />
-          <EntitySet Name="State" EntityType="Self.State" />
-          <EntitySet Name="User" EntityType="Self.User" />
-          <AssociationSet Name="FK_Message_Room" Association="Self.FK_Message_Room">
-            <End Role="Room" EntitySet="Room" />
-            <End Role="Message" EntitySet="Message" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Message_State" Association="Self.FK_Message_State">
-            <End Role="State" EntitySet="State" />
-            <End Role="Message" EntitySet="Message" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Message_User" Association="Self.FK_Message_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="Message" EntitySet="Message" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Room_State" Association="Self.FK_Room_State">
-            <End Role="State" EntitySet="State" />
-            <End Role="Room" EntitySet="Room" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_State" Association="Self.FK_User_State">
-            <End Role="State" EntitySet="State" />
-            <End Role="User" EntitySet="User" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -314,14 +311,13 @@
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="WebChatDBModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Login" ColumnName="Login" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="StateID" ColumnName="StateID" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="AccessToken" ColumnName="AccessToken" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

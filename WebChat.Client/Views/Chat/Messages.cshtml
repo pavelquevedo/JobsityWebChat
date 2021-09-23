@@ -20,6 +20,9 @@
         overflow: scroll;
         background: url('https://img.freepik.com/free-vector/abstract-white-light-grey-square-overlapped-pattern-background-with-shadow_453038-79.jpg');
     }
+    #txtMessage {
+        min-width: 100%;
+    }
 </style>
 
 <h2>@ViewBag.Title</h2>
@@ -59,7 +62,7 @@
             <!-- Message writing area -->
             <div class="panel-footer">
                 <div class="input-group">
-                    <input id="txtMessage" type="text" name="message" class="form-control input-sm" placeholder="Type your message here..." />
+                    <input id="txtMessage" type="text" name="message" class="form-control" placeholder="Type your message here..." />
                     <span class="input-group-btn">
                         <input type="submit" id="btnSend" style="width:100%" value="Send" class="btn btn-success" />
                     </span>
@@ -134,7 +137,6 @@
                 //Add new div to messages, focus the message area and clean it
                 $("#allMessages").append(newMessage);
                 $("#txtMessage").focus();
-                $("#txtMessage").prop("value", "");
 
                 //Play notification
                 document.getElementById("audioWelcome").play();
@@ -151,6 +153,7 @@
 
                 $("#btnSend").click(function () {
                     sendMessage();
+
                 });
             });
         });
@@ -173,6 +176,8 @@
 
             //Send message to the server side
             chatHub.server.send(roomId, userName, userId, message);
+            //Clean textbox after message sent
+            $("#txtMessage").prop("value", "");
         }
 
         //Scroll an element down

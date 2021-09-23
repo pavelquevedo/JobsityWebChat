@@ -40,5 +40,26 @@ namespace JobsityWebChat.Tests.Controllers
             //Checking if returning token
             Assert.IsNotNull(contentResult.Content.AccessToken);
         }
+
+        [TestMethod]
+        public async Task AuthenticationFailed()
+        {
+            LoginRequest loginRequest = new LoginRequest()
+            {
+                Login = "pavel",
+                Password = "incorrect password"
+            };
+            // Arrange
+            AccountController controller = new AccountController();
+
+            // Act
+            var httpActionResult = await controller.Authenticate(loginRequest);
+            var contentResult = httpActionResult as UnauthorizedResult;
+
+            // Assert
+            Assert.IsNotNull(contentResult);
+            //Checking data type
+            Assert.IsInstanceOfType(httpActionResult, typeof(UnauthorizedResult));
+        }
     }
 }

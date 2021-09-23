@@ -8,12 +8,12 @@
         <EntityTypeShape EntityType="WebChatDBModel.Message" Width="1.5" PointX="5.25" PointY="7.5" IsExpanded="true" />
         <EntityTypeShape EntityType="WebChatDBModel.Room" Width="1.5" PointX="3" PointY="6.5" IsExpanded="true" />
         <EntityTypeShape EntityType="WebChatDBModel.State" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="WebChatDBModel.User" Width="1.5" PointX="3" PointY="9.625" IsExpanded="true" />
         <AssociationConnector Association="WebChatDBModel.FK_Message_Room" ManuallyRouted="false" />
         <AssociationConnector Association="WebChatDBModel.FK_Message_State" ManuallyRouted="false" />
-        <AssociationConnector Association="WebChatDBModel.FK_Message_User" ManuallyRouted="false" />
         <AssociationConnector Association="WebChatDBModel.FK_Room_State" ManuallyRouted="false" />
-        <AssociationConnector Association="WebChatDBModel.FK_User_State" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="WebChatDBModel.User" Width="1.5" PointX="3" PointY="2.75" />
+        <AssociationConnector Association="WebChatDBModel.FK_Message_User" />
+        <AssociationConnector Association="WebChatDBModel.FK_User_State" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

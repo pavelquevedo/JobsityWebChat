@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using JobsityWebChat.Tests.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RestSharp;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
@@ -41,34 +43,33 @@ namespace JobsityWebChat.Tests.Controllers
         {
             //arrange
             int roomId = 1; //For room: Tech
-            OkNegotiatedContentResult<StockQuoteResponse> contentResult = null;
+            StockQuoteResponse processedQueue = null;
 
-            MessageController controller = new MessageController();
-
+            //Build queue request
             StockQuoteRequest queueRequest = new StockQuoteRequest() {
                 Command = "/stock=AAPL.US",
                 RoomId = 1
             };
+
+            //Generate user token
+            var userToken = LoginHelper.GetUserToken();
 
             StockQuoteResponse quoteResponse = RequestUtil.GetStockQuoteResponse(queueRequest);
 
             // Act
             if (quoteResponse !=null)
             {
-                var httpActionResult = await controller.SendBotMessage(roomId, quoteResponse);
-                contentResult = httpActionResult as OkNegotiatedContentResult<StockQuoteResponse>;
+                processedQueue = RequestUtil.ExecuteWebMethod<StockQuoteResponse>(string.Format("api/message/sendBotMessage?roomId={0}", queueRequest.RoomId), Method.POST, userToken, quoteResponse);
             }
 
-            // Assert
+            // Checking if quoteResponse is not null
             Assert.IsNotNull(quoteResponse);
-
+            //Check if processed queue is not null
+            Assert.IsNotNull(processedQueue);
             //Check if message was sent
-            Assert.AreEqual(contentResult.Content.State, WebChat.Utils.Common.Enum.State.SENT);
-
-            Assert.IsNotNull(contentResult);
-
-            //Checking users data
-            Assert.IsInstanceOfType(contentResult.Content, typeof(StockQuoteResponse));
+            Assert.AreEqual(processedQueue.State, WebChat.Utils.Common.Enum.State.SENT);
+            //Checking content type
+            Assert.IsInstanceOfType(processedQueue, typeof(StockQuoteResponse));
         }
     }
 }

@@ -11,7 +11,6 @@ namespace WebChat.Api.Controllers
     /// <summary>
     /// This controller manages rooms information
     /// </summary>
-    [Authorize]
     [RoutePrefix("api/room")]
     public class RoomController : BaseController
     {

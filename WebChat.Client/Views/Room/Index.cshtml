@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "Lobby";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
     string error = (string)ViewBag.error;
 }
 
@@ -13,15 +12,10 @@
     <div class="col-md-12">
         @foreach (var room in Model)
         {
-            <div>
-                <h4><b>@room.Name</b></h4>
+            <div class="form-group">
+                <a href="#" onclick="goToRoom(@room.Id)"><h4><b>@room.Name</b></h4></a>
                 @room.Description <br />
-
-                <div style="text-align:center;">
-                    <input type="button" class="btn btn-success" onclick="jsGo(@room.Id);" value="Enter" />
-                </div>
             </div>
-
         }
     </div>
 
@@ -29,7 +23,8 @@
 </div>
 
 <script type="text/javascript">
-    function jsGo(idRoom) {
+    //Function to enter into a room
+    function goToRoom(idRoom) {
         document.location.href = "@Url.Content("~/Chat/Messages/")" + "?roomId=" + idRoom;
     }
 </script>

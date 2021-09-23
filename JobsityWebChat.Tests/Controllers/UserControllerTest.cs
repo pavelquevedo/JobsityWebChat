@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using JobsityWebChat.Tests.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Web.Http.Results;
 using WebChat.Api.Controllers;
 using WebChat.Utils.Common.Models.Request;
 using WebChat.Utils.Common.Models.Response;
+using WebChat.Utils.Tools;
 
 namespace JobsityWebChat.Tests.Controllers
 {
@@ -37,13 +39,16 @@ namespace JobsityWebChat.Tests.Controllers
         [TestMethod]
         public async Task Register()
         {
+            var firstName = RandomNameGenerator.Generate(5);
+            var lastName = RandomNameGenerator.Generate(6);
+
             //Build user request
             UserRequest newUser = new UserRequest()
             {
-                Login = "pavelq",
-                FirstName = "Pavel",
-                LastName = "Quevedo",
-                Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4"
+                Login = firstName+lastName,
+                FirstName = firstName,
+                LastName = lastName,
+                Password = Encrypt.GetSHA256("mypass")
             };
 
             // Arrange
@@ -67,5 +72,31 @@ namespace JobsityWebChat.Tests.Controllers
             Assert.IsInstanceOfType(httpActionResult, typeof(OkNegotiatedContentResult<UserResponse>));
 
         }
+
+
+        [TestMethod]
+        public async Task RegisterAnExistingUser()
+        {
+            //Build user request
+            UserRequest newUser = new UserRequest()
+            {
+                Login = "pavelq",
+                FirstName = "Pavel",
+                LastName = "Quevedo",
+                Password = "03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4"
+            };
+
+            // Arrange
+            UserController controller = new UserController();
+
+            // Act
+            var httpActionResult = await controller.Register(newUser);
+
+            // Assert
+            //Check if statuscode = 409 Conflict
+            Assert.IsInstanceOfType(httpActionResult, typeof(ConflictResult));
+            
+        }
+
     }
 }

@@ -28,13 +28,13 @@ You can test the application running over azure services right here:
 https://jobsitywebchatclient.azurewebsites.net/
 
 # Local Installation
-Those are the steps you must follow if you want to run the project locally.
+These are the steps you must follow if you want to run the project locally.
 
 1. Restore nuget packages.
 2. By default I left the api connection strings references pointing to the published api. If you want to point the application to the local api, 
 these are te places where you have to change it:
   - WebChat.Api\Web.config\appSettings - JWT_AUDIENCE_TOKEN, JWT_ISSUER_TOKEN
-  - WebChat.Api.Tests\App.config\appSettings - JWT_AUDIENCE_TOKEN, JWT_ISSUER_TOKEN
+  - WebChat.Api.Test\App.config\appSettings - JWT_AUDIENCE_TOKEN, JWT_ISSUER_TOKEN, api_url
   - WebChat.Client\Web.config\appSettings - api_url
 3. Run the solution.
 

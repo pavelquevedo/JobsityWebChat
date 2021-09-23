@@ -86,12 +86,14 @@ namespace WebChat.Utils.Tools
             {
                 if (messageSplit[1].Length > 0)
                 {
-                    //var url = "https://stooq.com/q/l/"; //ConfigurationManager.AppSettings["stooq_api"];
-                    var url = Environment.GetEnvironmentVariable("stooq_api");
+                    //Getting url from web.config or app.config
+                    string urlApi = ConfigurationManager.AppSettings["stooq_api"];
+                    //Getting url from azure function config
+                    string urlAzureFunction = Environment.GetEnvironmentVariable("stooq_api");
                     var tableResult = new DataTable();
 
                     //Creating simple web request
-                    WebRequest webRequest = WebRequest.Create(url + string.Format("?s={0}&f=sd2t2ohlcv&h&e=csv", messageSplit[1]));
+                    WebRequest webRequest = WebRequest.Create(urlApi is null ? urlAzureFunction : urlApi + string.Format("?s={0}&f=sd2t2ohlcv&h&e=csv", messageSplit[1]));
 
                     //Web request properties
                     webRequest.Method = Method.GET.ToString();

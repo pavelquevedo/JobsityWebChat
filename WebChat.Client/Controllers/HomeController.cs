@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Net;
+using System.Web.Mvc;
 using WebChat.Client.Models.ViewModels;
 using WebChat.Utils.Common.Models.Request;
 using WebChat.Utils.Common.Models.Response;
@@ -38,17 +39,20 @@ namespace WebChat.Client.Controllers
             model.Password = Encrypt.GetSHA256(model.Password);
 
             //Authenticating user
-            UserResponse userResponse =
-                RequestUtil.ExecuteWebMethod<UserResponse>("api/authentication/authenticate", RestSharp.Method.POST, string.Empty, model);
+            ApiResponse authUserResponse =
+                RequestUtil.ExecuteWebMethod<UserResponse>("api/accounts/authenticate", RestSharp.Method.POST, string.Empty, model);
 
             //If user exists, access to the chatroom
-            if (userResponse != null)
+            if (authUserResponse.StatusCode == HttpStatusCode.OK)
             {
-                Session["User"] = userResponse;
+                Session["User"] = authUserResponse.Content;
                 return RedirectToAction("Index", "Room");
-            }
 
-            ViewBag.error = "Incorrect credentials";
+            }else if (authUserResponse.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                ViewBag.error = "Incorrect credentials";
+            }
+            
             return View();
         }
 
@@ -71,19 +75,21 @@ namespace WebChat.Client.Controllers
             model.Password = Encrypt.GetSHA256(model.Password);
 
             //Performing user registration
-            UserResponse userResponse =
-            RequestUtil.ExecuteWebMethod<UserResponse>("api/user/register", RestSharp.Method.POST, string.Empty, model);
+            ApiResponse userResponse = RequestUtil
+                .ExecuteWebMethod<UserResponse>("api/users", RestSharp.Method.POST, string.Empty, model);
 
-            if (userResponse != null)
+            if (userResponse.StatusCode == HttpStatusCode.OK)
             {
-                Session["User"] = userResponse;
+                Session["User"] = userResponse.Content;
                 return RedirectToAction("Index", "Room");
             }
-            else
+            else if(userResponse.StatusCode == HttpStatusCode.Conflict)
             {
                 ModelState.AddModelError("Login", "Seems like someone took that username before.");
-                return View(model);
             }
+
+            return View(model);
+
         }
     }
 }

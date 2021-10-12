@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Web.Mvc;
 using WebChat.Utils.Common.Models.Response;
 using WebChat.Utils.Tools;
@@ -22,12 +23,17 @@ namespace WebChat.Client.Controllers
             }
 
             //Getting available chatrooms
-            List<RoomResponse> roomResponseList =
-                RequestUtil.ExecuteWebMethod<List<RoomResponse>>("api/room/getAll", RestSharp.Method.GET, UserSession.AccessToken, null);
+            ApiResponse roomResponseList =
+                RequestUtil.ExecuteWebMethod<List<RoomResponse>>("api/rooms", RestSharp.Method.GET, UserSession.AccessToken, null);
 
-            if (roomResponseList != null)
+            if (roomResponseList.StatusCode == HttpStatusCode.OK)
             {
-                return View(roomResponseList);
+                return View(roomResponseList.Content);
+            }
+            else if (roomResponseList.StatusCode == HttpStatusCode.NoContent)
+            {
+                ViewBag.error = "No rooms available, come back later.";
+                return View();
             }
 
             ViewBag.error = "An error ocurred, please try again later.";

@@ -159,19 +159,27 @@
         });
 
         function sendMessage() {
-                //Fill variables needed
+            //Fill variables needed
             var userName = "@oUserSession.FirstName" + " @oUserSession.LastName";
             var roomId = @oCurrentRoom.Id;
             var message = $("#txtMessage").prop("value");
             var userId = "@oUserSession.Id";
 
+            //Stock quote regular expression
+            var exp = new RegExp('^(/STOCK)[=].{1,15}');
+            
             //If there's no message, then do nothing
             if (message == "") {
                 alert("Please type a message.");
                 return;
-            } else if (message.toUpperCase().includes("/STOCK=")) {
+            } else if (message.toUpperCase().includes("/STOCK")) {
                 //If message is a command, clean textbox
                 $("#txtMessage").prop("value", "");
+                //Check if message matches with regular expression
+                if (!exp.test(message.toUpperCase())) {
+                    alert("Command has an incorrect format. Try with something like this: /STOCK=AAPL.US");
+                    return;
+                }
             }
 
             //Send message to the server side

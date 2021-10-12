@@ -1,10 +1,13 @@
 ﻿using JobsityWebChat.Tests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestSharp;
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 using WebChat.Api.Controllers;
+using WebChat.Utils.Common.Constants;
 using WebChat.Utils.Common.Models.Request;
 using WebChat.Utils.Common.Models.Response;
 using WebChat.Utils.Tools;
@@ -43,33 +46,43 @@ namespace JobsityWebChat.Tests.Controllers
         {
             //arrange
             int roomId = 1; //For room: Tech
+            string stockCommand = "AAPL.US";
             StockQuoteResponse processedQueue = null;
 
             //Build queue request
-            StockQuoteRequest queueRequest = new StockQuoteRequest() {
-                Command = "/stock=AAPL.US",
-                RoomId = 1
-            };
+            string stooqRoute = string.Format(Path.Url.StockQuote, stockCommand);
 
             //Generate user token
             var userToken = LoginHelper.GetUserToken();
 
-            StockQuoteResponse quoteResponse = RequestUtil.GetStockQuoteResponse(queueRequest);
+            ApiResponse stockQueryReponse = RequestUtil
+                   .ExecuteWebMethod<String>(stooqRoute, Method.GET, string.Empty, null, true, Path.STOOQAPI_URL);
 
-            // Act
-            if (quoteResponse !=null)
+            if (stockQueryReponse.StatusCode == HttpStatusCode.OK)
             {
-                processedQueue = RequestUtil.ExecuteWebMethod<StockQuoteResponse>(string.Format("api/message/sendBotMessage?roomId={0}", queueRequest.RoomId), Method.POST, userToken, quoteResponse);
-            }
+                //Convert string result into CSV
+                StockQuoteResponse quoteResponse = CsvUtil.ConvertToStockQuoteResponse(stockQueryReponse.Content.ToString());
 
-            // Checking if quoteResponse is not null
-            Assert.IsNotNull(quoteResponse);
-            //Check if processed queue is not null
-            Assert.IsNotNull(processedQueue);
-            //Check if message was sent
-            Assert.AreEqual(processedQueue.State, WebChat.Utils.Common.Enum.State.SENT);
-            //Checking content type
-            Assert.IsInstanceOfType(processedQueue, typeof(StockQuoteResponse));
+                // Act
+                if (quoteResponse != null)
+                {
+                    processedQueue = (StockQuoteResponse)RequestUtil
+                        .ExecuteWebMethod<StockQuoteResponse>(string.Format("api/messages/{0}", roomId), Method.POST, userToken, quoteResponse).Content;
+                }
+
+                // Checking if quoteResponse is not null
+                Assert.IsNotNull(quoteResponse);
+                //Check if processed queue is not null
+                Assert.IsNotNull(processedQueue);
+                //Check if message was sent
+                Assert.AreEqual(processedQueue.State, WebChat.Utils.Common.Enum.State.SENT);
+                //Checking content type
+                Assert.IsInstanceOfType(processedQueue, typeof(StockQuoteResponse));
+            }
+            else
+            {
+                Assert.Fail("Stooq api is not returning valid status code.");
+            }           
         }
     }
 }

@@ -19,7 +19,19 @@ namespace WebChat.Utils.Common.Constants
         {
             get
             {
-                return ConfigurationManager.AppSettings["api_url"];
+                return ConfigurationManager.AppSettings["api_url"] == null
+                    ? Environment.GetEnvironmentVariable("api_url")
+                    : ConfigurationManager.AppSettings["api_url"];
+            }
+        }
+
+        public static string STOOQAPI_URL
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["stooq_api"] == null 
+                    ? Environment.GetEnvironmentVariable("stooq_api") 
+                    : ConfigurationManager.AppSettings["stooq_api"];
             }
         }
 
@@ -43,6 +55,14 @@ namespace WebChat.Utils.Common.Constants
                 get
                 {
                     return API_URL + "signalr/";
+                }
+            }
+
+            public static string StockQuote
+            {
+                get
+                {
+                    return "?s={0}&f=sd2t2ohlcv&h&e=csv";
                 }
             }
         }

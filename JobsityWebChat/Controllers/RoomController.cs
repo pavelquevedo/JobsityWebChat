@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WebChat.Utils.Common.Enum;
@@ -11,7 +12,7 @@ namespace WebChat.Api.Controllers
     /// <summary>
     /// This controller manages rooms information
     /// </summary>
-    [RoutePrefix("api/room")]
+    [RoutePrefix("api/rooms")]
     public class RoomController : BaseController
     {
         /// <summary>
@@ -19,7 +20,7 @@ namespace WebChat.Api.Controllers
         /// </summary>
         /// <returns>Single room object</returns>
         [HttpGet]
-        [Route("getSingle")]
+        [Route("{roomId:int}")]
         public async Task<IHttpActionResult> GetSingle(int roomId)
         {
             try
@@ -40,7 +41,7 @@ namespace WebChat.Api.Controllers
                 }
                 else
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
             }
             catch (Exception ex)
@@ -54,7 +55,7 @@ namespace WebChat.Api.Controllers
         /// </summary>
         /// <returns>List of rooms</returns>
         [HttpGet]
-        [Route("getAll")]
+        [Route("")]
         public async Task<IHttpActionResult> GetAll()
         {
             try
@@ -76,7 +77,7 @@ namespace WebChat.Api.Controllers
                 }
                 else
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
             }
             catch (Exception ex)

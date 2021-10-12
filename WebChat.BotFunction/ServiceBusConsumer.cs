@@ -49,6 +49,7 @@ namespace WebChat.QueueConsumerFunction
                     //Check if login succeded
                     if (loggedUserResponse.StatusCode == HttpStatusCode.OK)
                     {
+                        UserResponse loggedUser = (UserResponse)loggedUserResponse.Content;
                         //Send bot's message using message post api endpoint  
                         StockQuoteResponse result = (StockQuoteResponse)RequestUtil
                             .ExecuteWebMethod<StockQuoteResponse>(string.Format("api/messages/{0}", stockQueueRequest.RoomId), Method.POST, loggedUser.AccessToken, stockQuoteResponse).Content;

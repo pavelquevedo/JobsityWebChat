@@ -14,7 +14,7 @@ namespace WebChat.Api.Controllers
     /// This controller manages users information and registry
     /// </summary>
     [AllowAnonymous]
-    [RoutePrefix("api/user")]
+    [RoutePrefix("api/users")]
     public class UserController : BaseController
     {
         /// <summary>
@@ -22,7 +22,7 @@ namespace WebChat.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("getAll")]
+        [Route("")]
         public async Task<IHttpActionResult> GetAll()
         {
             try
@@ -45,7 +45,7 @@ namespace WebChat.Api.Controllers
                 }
                 else
                 {
-                    return Unauthorized();
+                    return StatusCode(System.Net.HttpStatusCode.NoContent);
                 }
 
             }
@@ -61,7 +61,7 @@ namespace WebChat.Api.Controllers
         /// <param name="model">User request model</param>
         /// <returns>User created object</returns>
         [HttpPost]
-        [Route("register")]
+        [Route("")]
         public async Task<IHttpActionResult> Register([FromBody] UserRequest model)
         {
             if (!ModelState.IsValid)
@@ -71,19 +71,16 @@ namespace WebChat.Api.Controllers
 
             try
             {
-                if (true)
+
+                //Checking if user already exists
+                var userQuery = await (from u in dbContext.User
+                                       where u.Login == model.Login
+                                       select u).FirstOrDefaultAsync();
+
+                //If exists return conflict code
+                if (userQuery != null)
                 {
-                    //Checking if user already exists
-                    var userQuery = await (from u in dbContext.User
-                                            where u.Login == model.Login
-                                            select u).FirstOrDefaultAsync();
-
-                    //If exists return conflict code
-                    if (userQuery != null)
-                    {
-                        return Conflict();
-                    }
-
+                    return Conflict();
                 }
 
                 //Building new user model

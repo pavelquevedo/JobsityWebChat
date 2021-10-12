@@ -9,6 +9,11 @@ namespace WebChat.Client.Controllers
 {
     public class ChatController : BaseController
     {
+        /// <summary>
+        /// Gets all the messages in an specific chat room 
+        /// </summary>
+        /// <param name="roomId">Chat room requested</param>
+        /// <returns>If chatroom exists, gets user's messages and returns messaging panel view</returns>
         public ActionResult Messages(int roomId)
         {
             if (UserSession == null)

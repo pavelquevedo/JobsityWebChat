@@ -63,6 +63,11 @@ namespace WebChat.Client.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Registers a new user into the system
+        /// </summary>
+        /// <param name="model">Model with user's properties</param>
+        /// <returns>If registration is successful, it redirects to Rooms menu</returns>
         [HttpPost]
         public ActionResult Register(RegisterViewModel model)
         {

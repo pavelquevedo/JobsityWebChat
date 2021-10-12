@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WebChat.Api.Models;
 using WebChat.Utils.Common.Models.Request;
@@ -17,6 +18,7 @@ namespace WebChat.Api
     {
         private readonly IQueueService _queueService;
         private WebChatDBEntities _db;
+        private const string stockQuoteRegEx = "(?i)^(/STOCK)[=].{1,15}";
 
         public ChatHub()
         {
@@ -52,10 +54,11 @@ namespace WebChat.Api
         /// <param name="message">Message body</param>
         public void Send(int roomId, string userName, int userId, string message)
         {
+
             string messageDate = DateTime.Now.ToString();
 
             //Check if user sent a stock request command
-            if (message.ToUpper().Contains("/STOCK="))
+            if (Regex.IsMatch(message.ToUpper(), stockQuoteRegEx))
             {
                 //Add request to the service bus queue
                 _queueService.CreateStockQueue(new StockQuoteRequest()

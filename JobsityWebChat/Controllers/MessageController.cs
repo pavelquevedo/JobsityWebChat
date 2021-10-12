@@ -2,6 +2,7 @@
 using System;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WebChat.Utils.Common.Enum;
@@ -11,7 +12,7 @@ namespace WebChat.Api.Controllers
 {    /// <summary>
      /// This controller manages the room's messages
      /// </summary>
-    [RoutePrefix("api/message")]
+    [RoutePrefix("api/messages")]
     public class MessageController : BaseController
     {
 
@@ -20,27 +21,28 @@ namespace WebChat.Api.Controllers
         /// </summary>
         /// <param name="roomId">Room unique identifier</param>
         /// <param name="model">Stooq.com api csv response converted into StockQuoteResponse object</param>
-        /// <returns></returns>
+        /// <returns>StockQuoteResponse model with SENT status</returns>
         [HttpPost]
-        [Route("sendBotMessage")]
+        [Route("{roomId:int}")]
         public async Task<IHttpActionResult> SendBotMessage([FromUri] int roomId, [FromBody] StockQuoteResponse model)
         {
             //Instantiate ChatHub context
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
             //Build bot response with csv data
-            var botResponse = string.Format("{0} quote is ${1} per share", model.Symbol, model.High);
+            var botResponse = string.Format("{0} quote is ${1} per share", model.Symbol, model.Close);
             
             try
             {
                 //Send message to specified RoomId
                 hubContext.Clients.Group(roomId.ToString()).sendChat("Chat Bot", botResponse, DateTime.Now.ToString(), 0);//TODO: Change bot user id
+                //Change model's state
                 model.State = State.SENT;
 
                 return Ok(model);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return InternalServerError(ex);
             }
         }
 
@@ -49,9 +51,9 @@ namespace WebChat.Api.Controllers
         /// </summary>
         /// <param name="roomId">Room unique identifier</param>
         /// <param name="userId">User unique identifier</param>
-        /// <returns></returns>
+        /// <returns>List with room's messages</returns>
         [HttpGet]
-        [Route("getRoomMessages")]
+        [Route("{roomId:int}/{userId:int}")]
         public async Task<IHttpActionResult> GetRoomMessages([FromUri] int roomId, int userId)
         {
             try
@@ -69,7 +71,7 @@ namespace WebChat.Api.Controllers
                                                CreationDate = m.CreationDate,
                                                UserFullName = m.User.FirstName + " " + m.User.LastName,
                                                MessageType = m.UserID == userId ? MessageType.OWN : MessageType.ALIEN
-                                           }).Take(50).ToListAsync();
+                                           }).Take(50).OrderBy(m => m.CreationDate).ToListAsync();
 
                 if (messagesQuery != null)
                 {
@@ -77,7 +79,7 @@ namespace WebChat.Api.Controllers
                 }
                 else
                 {
-                    return NotFound();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
             }
             catch (Exception ex)

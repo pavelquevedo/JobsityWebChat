@@ -188,8 +188,10 @@
     <Compile Include="Common\Models\Response\StockQuoteResponse.cs" />
     <Compile Include="Common\Models\Response\UserResponse.cs" />
     <Compile Include="Common\Models\Request\StockQuoteRequest.cs" />
+    <Compile Include="Common\Models\Response\ApiResponse.cs" />
     <Compile Include="Interface\IQueueService.cs" />
     <Compile Include="Services\StockQueueProducer.cs" />
+    <Compile Include="Tools\CsvUtil.cs" />
     <Compile Include="Tools\Encrypt.cs" />
     <Compile Include="Tools\RequestUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

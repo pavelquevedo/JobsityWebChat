@@ -1,4 +1,4 @@
-# JobsityWebChat
+# WebChat
 WebChat using SignalR, EntityFramework, MVC, SQL Server and Azure Service Bus Messaging.
 
 # Prerrequisites

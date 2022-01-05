@@ -23,10 +23,6 @@ These are the nuget packages installed manually in each solution.
 * LumenWorksX.Framework.IO v1.0.1 
 * Microsoft.Azure.ServiceBuse v.5.1.3 
 
-# Live app
-You can test the application running over azure services right here:
-https://jobsitywebchatclient.azurewebsites.net/
-
 # Local Installation
 These are the steps you must follow if you want to run the project locally.
 
@@ -37,8 +33,6 @@ these are te places where you have to change it:
   - WebChat.Api.Test\App.config\appSettings - JWT_AUDIENCE_TOKEN, JWT_ISSUER_TOKEN, api_url
   - WebChat.Client\Web.config\appSettings - api_url
 3. Run the solution.
-
-PS. If you want to run the bot WebChat.BotFunction locally, i'm sending you the local.settings.json file by mail and also the connection string for the sql server database.
 
 Thank you for reading, enjoy!
 
